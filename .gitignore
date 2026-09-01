@@ -1,0 +1,5 @@
+docs/future.md
+artifacts/
+build/
+.DS_Store
+test-fuzz/test-fuzz
