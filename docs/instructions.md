@@ -154,3 +154,45 @@ docker compose down
 
 `docker compose exec uds-fuzz bash`: 이미 실행 중인 컨테이너 접속
 `docker compose run uds-fuzz bash`: 컨테이너 실행하면서 바로 Bash 접속
+
+## Dockerfile 사용법
+
+1. Dockerfile 생성
+
+기본 폴더에 Dockerfile을 생성한다.
+
+2. compose.yml 파일 수정
+
+아래 부분을 Docker 파일 사용하도록 변경
+
+```yml
+image: ubuntu:24.04
+```
+
+Dockerfile 사용
+
+```yml
+build:
+    context: .
+    dockerfile: Dockerfile
+
+image: uds-testbed:latest
+```
+
+`image: <이미지이름>:<태그>` 형태로 이름과 버전을 지정해줄 수 있다.
+
+3. Dockerfile 작성
+
+```yml
+FROM <이미지>
+
+ENV <환경변수(패키지설치시사용자질문패스)>
+
+RUN <이미지시작시사용할명령>
+
+WORKDIR <host와공유하는폴터명>
+
+COM ["bash"]
+```
+
+패키지설치시사용자질문패스: `ENV DEBIAN_FRONTEND=noninteractive`

@@ -1,9 +1,15 @@
 services:
   uds-fuzz:
-    image: ubuntu:24.04
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    image: uds-fuzz
     container_name: uds-fuzz
+
     stdin_open: true
     tty: true
+
     command: sleep infinity
 
     volumes:
