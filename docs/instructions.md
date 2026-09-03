@@ -41,9 +41,9 @@ docker pull ubuntu:24.04
 docker run ubuntu:24.04
 ```
 
-백그라운드 실행: `-d`
-컨테이너 이름 지정: `--name uds-fuzz`
-컨테이너 안꺼지게 유지: `sleep infinity`
+- 백그라운드 실행: `-d`
+- 컨테이너 이름 지정: `--name uds-fuzz`
+- 컨테이너 안꺼지게 유지: `sleep infinity`
 
 ```bash
 docker run -d \
@@ -67,20 +67,20 @@ docker exec -it uds-fuzz bash
 
 5. 기초 사용법
 
-나중에 나가기: `exit`
-다시 들어가기: `docker exec -it uds-fuzz bash`
-컨테이너 중지: `docker stop uds-fuzz`
-컨테이너 시작: `docker start uds-fuzz`
-컨테이너 확인: `docker ps`
-꺼진 컨테이너 함께 확인: `docker ps -a`
-컨테이너 삭제: `docker rm uds-fuzz`
+- 나중에 나가기: `exit`
+- 다시 들어가기: `docker exec -it uds-fuzz bash`
+- 컨테이너 중지: `docker stop uds-fuzz`
+- 컨테이너 시작: `docker start uds-fuzz`
+- 컨테이너 확인: `docker ps`
+- 꺼진 컨테이너 함께 확인: `docker ps -a`
+- 컨테이너 삭제: `docker rm uds-fuzz`
 
 ### 한 줄 접속 명령어
 
-interactive, 표준 입력 계속 열어서 명령 입력할 수 있게 함: `-i`
-pseudo-TTY, 터미널처럼 보이게 해서 쉘 편하게 이용 가능: `-t`
-컨테이너 이름 지정: `--name uds-fuzz`
-컨테이너 안꺼지게 유지: `sleep infinity`
+- interactive, 표준 입력 계속 열어서 명령 입력할 수 있게 함: `-i`
+- pseudo-TTY, 터미널처럼 보이게 해서 쉘 편하게 이용 가능: `-t`
+- 컨테이너 이름 지정: `--name uds-fuzz`
+- 컨테이너 안꺼지게 유지: `sleep infinity`
 
 ```bash
 docker run -it \
@@ -107,13 +107,13 @@ services:
     command: bash
 ```
 
-`services`: 여러 컨테이너 설정을 묶는 최상위 항목
-`uds-fuzz`: 사용자가 붙인 서비스 이름, compose 안의 논리적 이름
-`image`: ubuntu:24.04 사용 (배포판 선택)
-`container_name`: 컨테이너 이름 지정, Docker가 실제로 만들 컨테이너 이름
-`stdin_open: true`: docker run에서 `-i`
-`tty: true`: docker run에서 `-t`
-`command: bash`: 시작 할 프로그램
+- `services`: 여러 컨테이너 설정을 묶는 최상위 항목
+- `uds-fuzz`: 사용자가 붙인 서비스 이름, compose 안의 논리적 이름
+- `image`: ubuntu:24.04 사용 (배포판 선택)
+- `container_name`: 컨테이너 이름 지정, Docker가 실제로 만들 컨테이너 이름
+- `stdin_open: true`: docker run에서 `-i`
+- `tty: true`: docker run에서 `-t`
+- `command: bash`: 시작 할 프로그램
 
 3. 실행한다.
 
@@ -152,8 +152,8 @@ docker compose down
 
 4. bash 접속
 
-`docker compose exec uds-fuzz bash`: 이미 실행 중인 컨테이너 접속
-`docker compose run uds-fuzz bash`: 컨테이너 실행하면서 바로 Bash 접속
+- `docker compose exec uds-fuzz bash`: 이미 실행 중인 컨테이너 접속
+- `docker compose run uds-fuzz bash`: 컨테이너 실행하면서 바로 Bash 접속
 
 ## Dockerfile 사용법
 

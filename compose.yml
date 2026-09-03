@@ -1,5 +1,6 @@
 services:
   uds-fuzz:
+    network_mode: host
     build:
       context: .
       dockerfile: Dockerfile
