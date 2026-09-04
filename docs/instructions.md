@@ -1,198 +1,124 @@
-# git submodule 사용법
+# 프로젝트 시작 방법
 
-1. third_party 폴더로 이동한다.
+프로젝트를 처음 실행할 때 필요한 기본 절차입니다. 상세 설명은 각 주제별 문서를 참고하세요.
+
+## 1. Git submodule 초기화
+
+이 프로젝트는 `third_party/iso14229`를 Git submodule로 사용합니다.
+
+저장소를 clone한 후 프로젝트 루트에서 실행합니다.
 
 ```bash
-cd ./third_party
+git submodule update --init --recursive
 ```
 
-2. git submodule을 이용해 가져온다.
+상태 확인:
 
 ```bash
-git submodule add https://github.com/<가져올레포>.git <설치경로/저장할폴더명>
-```
-
-3. 가져온 폴더를 확인한다.
-
-```bash
-ls <저장할폴더명>
 git submodule status
 ```
 
-# Docker 사용법
+## 2. 필요한 도구 확인
 
-## 수동으로 도커 생성
-
-### 도커 생성 명령어
-
-1. ubuntu 이미지 받기
+기본 개발 환경에는 Docker와 Docker Compose가 필요합니다.
 
 ```bash
-docker pull ubuntu:24.04
+docker --version
+docker compose version
 ```
 
-확인: `docker images`
-
-2. 컨테이너 생성 후 계속 켜두기
-
-컨테이너 생성
+ISO-TP 테스트에는 Linux와 `iproute2`도 필요합니다.
 
 ```bash
-docker run ubuntu:24.04
+ip -Version
 ```
 
-- 백그라운드 실행: `-d`
-- 컨테이너 이름 지정: `--name uds-fuzz`
-- 컨테이너 안꺼지게 유지: `sleep infinity`
+## 3. 퍼징 개발 컨테이너 실행
 
 ```bash
-docker run -d \
-    --name uds-fuzz \
-    ubuntu:24.04 \
-    sleep infinity
+./docker_run.sh
 ```
 
+이 스크립트는 `uds-fuzz` 컨테이너를 실행하고 Bash로 접속합니다. 프로젝트 폴더는 컨테이너의 `/work`에 연결됩니다.
 
-3. 실행중인지 확인
+종료:
 
 ```bash
-docker ps
-```
-
-4. ubuntu 안으로 접속
-
-```bash
-docker exec -it uds-fuzz bash
-```
-
-5. 기초 사용법
-
-- 나중에 나가기: `exit`
-- 다시 들어가기: `docker exec -it uds-fuzz bash`
-- 컨테이너 중지: `docker stop uds-fuzz`
-- 컨테이너 시작: `docker start uds-fuzz`
-- 컨테이너 확인: `docker ps`
-- 꺼진 컨테이너 함께 확인: `docker ps -a`
-- 컨테이너 삭제: `docker rm uds-fuzz`
-
-### 한 줄 접속 명령어
-
-- interactive, 표준 입력 계속 열어서 명령 입력할 수 있게 함: `-i`
-- pseudo-TTY, 터미널처럼 보이게 해서 쉘 편하게 이용 가능: `-t`
-- 컨테이너 이름 지정: `--name uds-fuzz`
-- 컨테이너 안꺼지게 유지: `sleep infinity`
-
-```bash
-docker run -it \
-    --name uds-fuzz \
-    ubuntu:24.04 \
-    bash
-```
-
-삭제: `docker rm uds-fuzz`
-
-## Docker-Compose로 도커 생성
-
-1. compose.yaml 파일을 생성한다.
-
-2. yml 파일에 내용을 삽입한다.
-
-```yaml
-services:
-  uds-fuzz:
-    image: ubuntu:24.04
-    container_name: uds-fuzz
-    stdin_open: true
-    tty: true
-    command: bash
-```
-
-- `services`: 여러 컨테이너 설정을 묶는 최상위 항목
-- `uds-fuzz`: 사용자가 붙인 서비스 이름, compose 안의 논리적 이름
-- `image`: ubuntu:24.04 사용 (배포판 선택)
-- `container_name`: 컨테이너 이름 지정, Docker가 실제로 만들 컨테이너 이름
-- `stdin_open: true`: docker run에서 `-i`
-- `tty: true`: docker run에서 `-t`
-- `command: bash`: 시작 할 프로그램
-
-3. 실행한다.
-
-```bash
-docker compose run uds-fuzz
-```
-
-### Host 프로젝트 폴더와 Docker를 연결하는 `volume`
-
-```bash
-ru
-```
-
-`volumes: - .`:
-- `/work`: 호스트의 현재 프로젝트 폴더를 Docker 컨테이너 안의 /work 경로에 연결하는 설정
-- 그래서 호스트의 해당 프로젝트 파일들을 컨테이너에서 /work 아래에서 그대로 볼 수 있다.
-- 컨테이너에서 /work 안의 파일을 수정하면 호스트 파일도 같이 바뀐다.
-
-1. 자동으로 docker compose 파일 찾아 실행
-
-```bash
-docker compose up
-```
-
-2. 백그라운드에서 실행
-
-```bash
-docker compose up -d
-```
-
-3. docker 종료
-
-```bash
+exit
 docker compose down
 ```
 
-4. bash 접속
+자세한 Docker 구성은 [Docker 구성과 사용법](docker.md)을 참고하세요.
 
-- `docker compose exec uds-fuzz bash`: 이미 실행 중인 컨테이너 접속
-- `docker compose run uds-fuzz bash`: 컨테이너 실행하면서 바로 Bash 접속
+## 4. Stateless ISO-TP 통신 테스트
 
-## Dockerfile 사용법
+Linux에서 다음 스크립트를 실행합니다.
 
-1. Dockerfile 생성
-
-기본 폴더에 Dockerfile을 생성한다.
-
-2. compose.yml 파일 수정
-
-아래 부분을 Docker 파일 사용하도록 변경
-
-```yml
-image: ubuntu:24.04
+```bash
+./scripts/run_isotp_stateless_test.sh
 ```
 
-Dockerfile 사용
+정상 결과:
 
-```yml
-build:
-    context: .
-    dockerfile: Dockerfile
-
-image: uds-testbed:latest
+```text
+PASS: 62 F1 90 01 02 03 04
 ```
 
-`image: <이미지이름>:<태그>` 형태로 이름과 버전을 지정해줄 수 있다.
+전체 정리:
 
-3. Dockerfile 작성
-
-```yml
-FROM <이미지>
-
-ENV <환경변수(패키지설치시사용자질문패스)>
-
-RUN <이미지시작시사용할명령>
-
-WORKDIR <host와공유하는폴터명>
-
-COM ["bash"]
+```bash
+./scripts/cleanup_isotp_stateless_test.sh
 ```
 
-패키지설치시사용자질문패스: `ENV DEBIAN_FRONTEND=noninteractive`
+상세 통신 과정은 [Stateless ISO-TP 통합 테스트](isotp_stateless_test.md)를 참고하세요.
+
+## 5. Rust ECU 자동 통신 테스트
+
+```bash
+./scripts/run_uds_ecu_rust_test.sh
+```
+
+정상 결과:
+
+```text
+PASS session: 50 03
+PASS DID: 62 F1 90 01 02 03 04
+PASS seed: 67 01 12 34
+PASS key: 67 02
+```
+
+전체 정리:
+
+```bash
+./scripts/cleanup_uds_ecu_rust_test.sh
+```
+
+## 6. Stateful Rust ECU 직접 실행
+
+먼저 Linux에서 `vcan0`를 준비합니다.
+
+```bash
+sudo modprobe vcan
+sudo ip link add dev vcan0 type vcan
+sudo ip link set dev vcan0 up
+```
+
+`vcan0`가 이미 존재하면 `ip link add`는 생략합니다.
+
+ECU 실행:
+
+```bash
+cargo run --manifest-path ecu-projects/uds-ecu-rust/Cargo.toml
+```
+
+## 관련 문서
+
+- [Docker 구성과 사용법](docker.md)
+- [libFuzzer 사용법](libFuzzer.md)
+- [Rust 컴파일](rust_compile.md)
+- [Stateless vECU](stateless_vecu.md)
+- [Stateful vECU](stateful_vecu.md)
+- [uds-ecu-rust 구조와 실행 방법](uds_ecu_rust.md)
+- [UDS 코드에서 사용하는 Rust 문법](rust_uds_syntax.md)
+- [uds-ecu-rust cargo-fuzz 사용법](cargo_fuzz.md)
+- [Stateless ISO-TP 통합 테스트](isotp_stateless_test.md)

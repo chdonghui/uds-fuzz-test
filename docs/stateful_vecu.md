@@ -29,12 +29,10 @@ Extended Session에서 22 F1 90 -> 허용
 
 ## 예제 구성
 
-| 파일 | 역할 |
-|---|---|
-| `examples/stateful_ecu_mvp.rs` | 세션 상태 변경의 최소 구현 |
-| `examples/stateful_ecu.rs` | 세션, 요청 길이, DID, NRC 처리 보강 |
-| `examples/isotp_stateful.rs` | `vcan0`에서 ISO-TP 요청을 수신하고 응답 |
-| `examples/isotp_stateful_ecu.rs` | ISO-TP 코드에서 분리한 UDS 처리 로직 |
+- `examples/stateful_ecu_mvp.rs`: 세션 상태 변경의 최소 구현
+- `examples/stateful_ecu.rs`: 세션, 요청 길이, DID, NRC 처리 보강
+- `examples/isotp_stateful.rs`: `vcan0`에서 ISO-TP 요청을 수신하고 응답
+- `examples/isotp_stateful/ecu.rs`: ISO-TP 코드에서 분리한 UDS 처리 로직
 
 ## 1. Stateful MVP
 
@@ -201,7 +199,7 @@ loop {
 `isotp_stateful.rs`는 다음 선언으로 UDS 로직을 가져옵니다.
 
 ```rust
-#[path = "isotp_stateful_ecu.rs"]
+#[path = "isotp_stateful/ecu.rs"]
 mod isotp_stateful_ecu;
 use isotp_stateful_ecu::handle_request;
 ```
@@ -215,7 +213,7 @@ isotp_stateful.rs
 ├── session 보관
 └── ISO-TP 응답 송신
 
-isotp_stateful_ecu.rs
+isotp_stateful/ecu.rs
 └── session과 UDS 요청을 검사하여 응답 생성
 ```
 

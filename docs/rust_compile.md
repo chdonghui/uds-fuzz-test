@@ -26,5 +26,5 @@ cargo run --example <개별파일명>
 - src/bin에 rs 파일 생성
 
 ```bash
-cargo run -bin <파일명>
+cargo run --bin <파일명>
 ```
