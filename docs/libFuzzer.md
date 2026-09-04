@@ -71,15 +71,13 @@ apt install -y clang build-essential git curl ca-certificates
 
 clang에 libFuzzer 런타임이 포함되어 있기 때문에 바로 사용 가능함.
 
-1. 폴더 생성 및 이동
+1. 예제 폴더로 이동
 
 ```bash
-cd /work
-mkdir -p test-fuzz
-cd test-fuzz
+cd /work/fuzz/examples
 ```
 
-2. test.c 테스트 코드 생성
+2. `libfuzzer_basic.c` 테스트 코드 확인
 
 ```bash
 apt update
@@ -127,7 +125,7 @@ Include Header:
 3. 빌드
 
 ```bash
-clang -g -fsanitize=fuzzer,address test.c -o test-fuzz
+clang -g -fsanitize=fuzzer,address libfuzzer_basic.c -o libfuzzer-basic
 ```
 
 - `clang`
@@ -142,13 +140,13 @@ clang -g -fsanitize=fuzzer,address test.c -o test-fuzz
   - 두 기능을 붙여서 빌드.
   - fuzzer는 libFuzzer를 연결
   - address는 ASan(AddressSanitizer)을 활성화해 메모리 오류를 탐지
-- `test.c`
+- `libfuzzer_basic.c`
   - 컴파일할 C 소스 파일.
-- `-o test-fuzz`
-  - 만들어질 실행 파일의 이름을 test-fuzz로 지정.
+- `-o libfuzzer-basic`
+  - 만들어질 실행 파일의 이름을 `libfuzzer-basic`으로 지정.
 
 4. 실행
 
 ```bash
-./test-fuzz
+./libfuzzer-basic
 ```

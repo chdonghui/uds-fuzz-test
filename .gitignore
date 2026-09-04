@@ -2,4 +2,5 @@ docs/future.md
 artifacts/
 build/
 .DS_Store
-test-fuzz/test-fuzz
+/test-fuzz/
+fuzz/examples/libfuzzer-basic

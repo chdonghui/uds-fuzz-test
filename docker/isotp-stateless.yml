@@ -1,0 +1,10 @@
+services:
+  vecu:
+    build:
+      context: ../ecu-projects/ecu-demo/rust
+      dockerfile: Dockerfile.isotp
+    network_mode: host
+
+  isotp-stateless-test:
+    build: ../tests/integration/isotp_stateless
+    network_mode: host
