@@ -65,6 +65,3 @@ pub fn handle_request(session: &mut u8, req: &[u8]) -> Vec<u8> {
         [] => vec![],
     }
 }
-
-fn main() {}
-

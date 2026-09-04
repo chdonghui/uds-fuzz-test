@@ -1,6 +1,5 @@
-#[path = "isotp_stateful_ecu.rs"]
+#[path = "isotp_stateful/ecu.rs"]
 mod isotp_stateful_ecu;
-
 use isotp_stateful_ecu::handle_request;
 use socketcan_isotp::{IsoTpSocket, StandardId};
 
