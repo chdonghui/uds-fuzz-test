@@ -1,0 +1,10 @@
+name: uds-ecu-rust-test
+
+services:
+  uds-ecu-rust:
+    build: ../ecu-projects/uds-ecu-rust
+    network_mode: host
+
+  uds-ecu-rust-test:
+    build: ../tests/integration/uds_ecu_rust
+    network_mode: host
