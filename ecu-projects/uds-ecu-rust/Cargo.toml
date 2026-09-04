@@ -1,5 +1,5 @@
 [package]
-name = "ecu-rust"
+name = "uds-ecu-rust"
 version = "0.1.0"
 edition = "2024"
 

@@ -1,7 +1,5 @@
-mod ecu;
-
-use ecu::handle_request;
 use socketcan_isotp::{IsoTpSocket, StandardId};
+use uds_ecu_rust::ecu::{EcuState, handle_request};
 
 fn main() -> Result<(), socketcan_isotp::Error> {
     let mut socket = IsoTpSocket::open(
@@ -10,13 +8,13 @@ fn main() -> Result<(), socketcan_isotp::Error> {
         StandardId::new(0x7E8).expect("invalid TX ID"),
     )?;
 
-    let mut session: u8 = 0x01;
+    let mut state = EcuState::new();
 
     loop {
         println!("waiting...");
 
         let req = socket.read()?;
-        let response = handle_request(&mut session, &req);
+        let response = handle_request(&mut state, &req);
 
         socket.write(&response)?;
     }
