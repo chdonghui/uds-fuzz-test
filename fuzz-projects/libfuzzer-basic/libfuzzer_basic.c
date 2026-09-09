@@ -1,5 +1,6 @@
 #include <stddef.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
 {
@@ -8,7 +9,7 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
         data[1] == 'D' &&
         data[2] == 'S')
     {
-	    __builtin_trap();
+        abort();
     }
 
     return 0;

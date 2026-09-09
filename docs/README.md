@@ -64,7 +64,7 @@ Diagnostic Session과 SecurityAccess처럼 요청 사이에 상태를 유지하�
 
 ### [libFuzzer 사용법](libFuzzer.md)
 
-C 하네스와 libFuzzer를 이용한 기본 퍼징 방법을 설명합니다.
+C 하네스와 libFuzzer 기본 예제, `iso14229` stateless 서버 퍼저의 Docker 자동 실행 방법을 설명합니다.
 
 ### [uds-ecu-rust cargo-fuzz 사용법](cargo_fuzz.md)
 
@@ -90,7 +90,7 @@ cargo-fuzz의 터미널 로그, corpus, artifacts와 코드 커버리지를 확�
 
 ### [향후 계획](future.md)
 
-프로젝트에서 앞으로 구현하거나 개선할 내용을 정리합니다.
+완료된 퍼징 단계, 공개용·보안 분석용 하네스 구분과 Boundary, Stateful, Coverage, upstream 제보 계획을 정리합니다.
 
 ## 목적별 빠른 찾기
 
@@ -107,3 +107,4 @@ cargo-fuzz의 터미널 로그, corpus, artifacts와 코드 커버리지를 확�
 - Stateful corpus의 요청과 응답을 확인하려면 [Stateful 퍼징 결과 확인](cargo_stateful_fuzz_results.md)을 참고하세요.
 - Replay 예제 코드를 이해하려면 [Stateful Replay 코드 이해](replay_stateful_code.md)를 참고하세요.
 - 일반적인 퍼징 결과를 확인하려면 [cargo-fuzz 결과 해석](cargo_fuzz_results.md)을 참고하세요.
+- 현재 퍼징 진행 상태와 다음 작업은 [퍼징 진행 상태와 계획](future.md)을 참고하세요.

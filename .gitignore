@@ -1,6 +1,7 @@
-docs/future.md
+
 artifacts/
 build/
 .DS_Store
-/test-fuzz/
-fuzz/examples/libfuzzer-basic
+notion.md
+fuzz-projects/libfuzzer-basic/libfuzzer-basic
+/security-analysis/

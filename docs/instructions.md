@@ -18,6 +18,72 @@ git submodule update --init --recursive
 git submodule status
 ```
 
+### iso14229 버전 업데이트
+
+위 초기화 명령은 **프로젝트에 기록된 커밋**을 가져오며, 자동으로 최신 버전을 선택하지 않습니다. 아래 명령은 모두 프로젝트 루트에서 실행합니다.
+
+먼저 서브모듈 내부에 수정한 파일이 없는지 확인합니다. 변경이 있다면 먼저 별도 커밋 등으로 보존하세요.
+
+```bash
+git -C third_party/iso14229 status --short
+```
+
+#### 방법 1: 최신 릴리스 선택 — 권장
+
+원격 커밋과 태그를 가져온 뒤 버전 목록을 확인합니다.
+
+```bash
+git -C third_party/iso14229 fetch origin --tags
+git -C third_party/iso14229 tag --sort=-version:refname
+```
+
+태그 목록과 [공식 릴리스](https://github.com/driftregion/iso14229/releases)를 확인하고 원하는 최신 정식 릴리스 태그를 선택합니다. 목록 맨 위가 반드시 최신 안정 릴리스인 것은 아닙니다.
+
+`gh`없이 `curl`과 Python 3로 GitHub가 지정한 최신 정식 릴리스 태그만 확인할 수 있습니다.
+
+```bash
+curl -fsSL https://api.github.com/repos/driftregion/iso14229/releases/latest \
+  | python3 -c 'import json, sys; print(json.load(sys.stdin)["tag_name"])'
+```
+
+이 명령은 조회만 하며 서브모듈을 변경하지 않습니다. API 오류나 호출 제한으로 조회가 실패하면 공식 릴리스 페이지에서 확인하세요. 정식 릴리스라는 표시가 버그 없음을 보장하지는 않습니다.
+
+출력된 태그로 전환합니다.
+
+```bash
+git -C third_party/iso14229 checkout --detach <릴리스-태그>
+```
+
+`<릴리스-태그>`는 실제 확인한 태그로 바꿉니다.
+
+#### 방법 2: 개발 브랜치 최신 커밋 선택
+
+정식 릴리스 이후 개발 중인 변경까지 가져오려면 다음 명령을 사용합니다.
+
+```bash
+git submodule update --init --remote third_party/iso14229
+```
+
+이 명령은 서브모듈에 설정된 추적 브랜치를 사용하며, 별도 설정이 없다면 원격 기본 브랜치를 사용합니다. 최신 릴리스 태그를 선택하는 명령은 아닙니다.
+
+#### 변경 확인 및 기록
+
+두 방법 중 하나를 실행한 후 변경된 커밋을 확인합니다.
+
+```bash
+git submodule status
+git diff --submodule=log -- third_party/iso14229
+```
+
+API 변경 여부와 빌드·기본 테스트 호환성을 확인한 뒤 상위 저장소에 새 커밋 ID를 기록합니다.
+
+```bash
+git add third_party/iso14229
+git commit -m "chore: update iso14229 submodule"
+```
+
+상위 저장소는 새로 선택한 커밋 하나에 다시 고정됩니다. 이후 원격에 새 버전이 나와도 자동으로 업데이트되지 않습니다.
+
 ## 2. 필요한 도구 확인
 
 기본 개발 환경에는 Docker와 Docker Compose가 필요합니다.

@@ -69,12 +69,20 @@ apt install -y clang build-essential git curl ca-certificates
 
 ## libFuzzer 동작 확인
 
-clang에 libFuzzer 런타임이 포함되어 있기 때문에 바로 사용 가능함.
+가장 간단한 방법은 저장소 루트에서 자동 실행 스크립트를 사용하는 것입니다.
+
+```bash
+./fuzz-projects/libfuzzer-basic/run.sh
+```
+
+Docker 빌드, Clang 컴파일, 최대 10초 퍼징과 artifact 저장을 자동으로 수행합니다. 발견 결과는 `fuzz-projects/libfuzzer-basic/artifacts/crash`에 저장되며 정상 결과는 `55 44 53`, 즉 `UDS`입니다.
+
+아래는 컨테이너 안에서 직접 빌드하는 수동 방법입니다.
 
 1. 예제 폴더로 이동
 
 ```bash
-cd /work/fuzz/examples
+cd /work/fuzz-projects/libfuzzer-basic
 ```
 
 2. `libfuzzer_basic.c` 테스트 코드 확인
@@ -87,6 +95,7 @@ apt install -y vim
 ```c
 #include <stddef.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
 {
@@ -95,7 +104,7 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
         data[1] == 'D' &&
         data[2] == 'S')
     {
-        __builtin_trap();
+        abort();
     }
 
     return 0;
@@ -117,9 +126,9 @@ Include Header:
 `data[0] == 'U' && data[1] == 'D' && data[2] == 'S')`
 - 입력의 첫 세 바이트가 각각 `U, D, S`인지 검사
 
-`__builtin_trap();`
-- Clang이 제공하는 기능으로 프로그램을 의도적으로 즉시 비정상 종료시킴
-- libFuzzer가 crash 제대로 찾는지 테스트하기 위
+`abort();`
+- 표준 C 함수로 프로그램에 `SIGABRT`를 발생시켜 의도적으로 종료함
+- libFuzzer가 crash 입력을 저장하는지 확인하기 위해 사용
 
 
 3. 빌드
@@ -150,3 +159,32 @@ clang -g -fsanitize=fuzzer,address libfuzzer_basic.c -o libfuzzer-basic
 ```bash
 ./libfuzzer-basic
 ```
+
+## iso14229 서버 퍼저 실행
+
+저장소 루트에서 다음 스크립트를 실행합니다.
+
+```bash
+./fuzz-projects/iso14229-server/run.sh
+```
+
+입력 파일 하나를 raw UDS payload 하나로 사용합니다. Docker에서 Clang, libFuzzer, ASan과 UBSan을 적용해 30초 동안 실행합니다.
+
+구조와 결과 확인 방법은 `fuzz-projects/iso14229-server/README.md`를 참고하세요.
+
+첫 30초 실행에서는 약 939만 회를 수행하고 corpus가 180개로 확장됐으며 ASan/UBSan 오류는 발견되지 않았습니다. 오류 미발견은 전체 안전성을 증명하지 않습니다.
+
+## 일반 퍼저와 보안 분석 퍼저 구분
+
+```text
+fuzz-projects/
+→ 공개 가능한 일반 학습·OSS 퍼저
+
+security-analysis/
+→ 미공개 후보를 확인하는 특화 oracle과 artifact
+→ Git 추적 제외
+```
+
+일반 ASan 퍼저는 큰 고정 배열 내부에서 실제 메시지 길이만 벗어나는 stale read를 탐지하지 못할 수 있습니다. 이러한 경우 동일 입력을 서로 다른 tail poison에서 실행하고 정규화된 콜백 결과를 비교하는 semantic oracle이 필요합니다.
+
+현재 진행 상태와 이후 순서는 [퍼징 진행 상태와 계획](future.md)을 참고하세요.

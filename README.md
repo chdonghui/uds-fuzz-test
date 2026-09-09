@@ -9,9 +9,9 @@ docker/                # 추가 Docker Compose 구성
 ecu-projects/
 ├── ecu-demo/          # Rust 기반 UDS/ISO-TP 학습 예제
 └── uds-ecu-rust/      # Stateful Rust UDS ECU
-fuzz/
-├── examples/          # libFuzzer 동작 확인 예제
-└── server_fuzz.c      # iso14229 UDS 서버 퍼징 하네스
+fuzz-projects/
+├── libfuzzer-basic/   # libFuzzer 동작 확인 예제
+└── iso14229-server/   # iso14229 UDS 서버 퍼징 하네스
 tests/integration/     # Docker 기반 ISO-TP 통합 테스트
 scripts/               # 실행 자동화 스크립트
 third_party/iso14229/  # C 기반 UDS 라이브러리 서브모듈
@@ -42,13 +42,23 @@ third_party/iso14229/  # C 기반 UDS 라이브러리 서브모듈
 
 [driftregion/iso14229](https://github.com/driftregion/iso14229)를 Git submodule로 포함합니다. C로 작성된 UDS 프로토콜 라이브러리이며 서버 퍼징 대상입니다.
 
-### `fuzz/examples/libfuzzer_basic.c`
+### `fuzz-projects/libfuzzer-basic/libfuzzer_basic.c`
 
 `UDS` 입력에서 의도적인 크래시를 발생시켜 libFuzzer 동작을 확인하는 기초 예제입니다.
 
-### `fuzz/server_fuzz.c`
+```bash
+./fuzz-projects/libfuzzer-basic/run.sh
+```
 
-libFuzzer 입력을 `iso14229`의 UDS 서버에 전달하는 퍼징 하네스입니다.
+### `fuzz-projects/iso14229-server/server_fuzz.c`
+
+libFuzzer 입력을 `iso14229`의 UDS 서버에 전달하는 stateless 퍼징 하네스입니다.
+
+```bash
+./fuzz-projects/iso14229-server/run.sh
+```
+
+입력 하나를 raw UDS payload 하나로 사용하며 Docker에서 30초 동안 ASan/UBSan 퍼징을 실행합니다.
 
 ### `ecu-projects/uds-ecu-rust`
 
