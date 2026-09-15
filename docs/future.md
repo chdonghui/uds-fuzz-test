@@ -6,11 +6,10 @@
 
 ```text
 fuzz-projects/
-→ 공개 가능한 일반 학습·OSS 퍼징 하네스
+→ C/C++ 기반 학습·OSS 퍼징 하네스
 
-security-analysis/
-→ 미공개 후보, 최소 재현, artifact와 제보 준비 자료
-→ Git 추적 제외
+ecu-projects/uds-ecu-rust/fuzz/
+→ Rust ECU의 cargo-fuzz target과 corpus
 
 third_party/
 → 수정하지 않는 upstream OSS 원본
@@ -75,19 +74,6 @@ ASan/UBSan finding 없음
 
 오류가 없었다는 것은 해당 실행에서 sanitizer가 문제를 찾지 못했다는 뜻이며, 라이브러리 전체의 안전성을 증명하지는 않습니다.
 
-### 3. 격리된 보안 재현과 특화 퍼저
-
-Git에서 제외된 `security-analysis/`에서 다음 방법을 확인했습니다.
-
-```text
-정적 분석 후보의 최소 재현
-정상 대조군과 canary 비교
-ISO-TP 입력의 ASan 자동 탐색
-같은 요청을 다른 tail poison으로 실행하는 메시지 경계 oracle
-저장된 artifact 재실행
-```
-
-미수정 취약점의 입력값과 상세 로그는 공개 문서가 아니라 `security-analysis/iso14229/docs/`에만 기록합니다.
 
 ## 다음 작업
 
@@ -104,7 +90,7 @@ ISO-TP 입력의 ASan 자동 탐색
 요청 밖 poison 값이 파싱 결과에 영향을 주는가?
 ```
 
-이 단계는 구체적인 미수정 문제를 다룰 수 있으므로 `security-analysis/`에서 진행합니다.
+이 저장소에서는 재사용 가능한 Boundary oracle을 `fuzz-projects/` 아래의 독립 퍼저로 구현합니다.
 
 ### 2. Boundary oracle 일반화
 

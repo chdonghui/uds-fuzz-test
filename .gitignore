@@ -3,5 +3,5 @@ artifacts/
 build/
 .DS_Store
 notion.md
+notion_*.md
 fuzz-projects/libfuzzer-basic/libfuzzer-basic
-/security-analysis/

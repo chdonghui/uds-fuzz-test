@@ -174,17 +174,16 @@ clang -g -fsanitize=fuzzer,address libfuzzer_basic.c -o libfuzzer-basic
 
 첫 30초 실행에서는 약 939만 회를 수행하고 corpus가 180개로 확장됐으며 ASan/UBSan 오류는 발견되지 않았습니다. 오류 미발견은 전체 안전성을 증명하지 않습니다.
 
-## 일반 퍼저와 보안 분석 퍼저 구분
+## 이 저장소의 퍼저 구분
 
 ```text
 fuzz-projects/
-→ 공개 가능한 일반 학습·OSS 퍼저
+→ C/C++ libFuzzer 하네스
 
-security-analysis/
-→ 미공개 후보를 확인하는 특화 oracle과 artifact
-→ Git 추적 제외
+ecu-projects/uds-ecu-rust/fuzz/
+→ Rust ECU cargo-fuzz target
 ```
 
-일반 ASan 퍼저는 큰 고정 배열 내부에서 실제 메시지 길이만 벗어나는 stale read를 탐지하지 못할 수 있습니다. 이러한 경우 동일 입력을 서로 다른 tail poison에서 실행하고 정규화된 콜백 결과를 비교하는 semantic oracle이 필요합니다.
+일반 ASan 퍼저는 큰 고정 배열 내부에서 실제 메시지 길이만 벗어나는 stale read를 탐지하지 못할 수 있습니다. 이러한 경우 동일 입력을 서로 다른 tail poison에서 실행하고 정규화된 콜백 결과를 비교하는 semantic oracle이 필요합니다. 해당 검사가 필요하면 `fuzz-projects/` 아래에 별도 Boundary 하네스를 추가합니다.
 
 현재 진행 상태와 이후 순서는 [퍼징 진행 상태와 계획](future.md)을 참고하세요.

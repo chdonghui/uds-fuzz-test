@@ -90,7 +90,7 @@ cargo-fuzz의 터미널 로그, corpus, artifacts와 코드 커버리지를 확�
 
 ### [향후 계획](future.md)
 
-완료된 퍼징 단계, 공개용·보안 분석용 하네스 구분과 Boundary, Stateful, Coverage, upstream 제보 계획을 정리합니다.
+완료된 퍼징 단계와 Boundary, Stateful, Coverage 및 upstream 제보 계획을 정리합니다.
 
 ## 목적별 빠른 찾기
 

@@ -2,7 +2,7 @@
 
 이 폴더는 독립적으로 빌드하고 실행하는 C/C++ 퍼징 하네스를 대상별로 관리합니다.
 
-Rust의 `cargo fuzz`가 생성하는 `ecu-projects/uds-ecu-rust/fuzz/`와 보안 재현을 격리하는 `security-analysis/iso14229/fuzz/`는 이동하지 않습니다.
+Rust `cargo-fuzz` target은 `ecu-projects/uds-ecu-rust/fuzz/`에서 관리하며 이 폴더로 이동하지 않습니다.
 
 ## 구조
 

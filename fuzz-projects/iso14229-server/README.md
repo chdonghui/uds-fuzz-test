@@ -117,6 +117,6 @@ PASS: stateless server fuzzing completed without a sanitizer finding.
 
 ## 현재 범위
 
-이 퍼저는 ASan, UBSan, assertion과 프로세스 크래시를 찾는 공개 가능한 일반 하네스입니다.
+이 퍼저는 ASan, UBSan, assertion과 프로세스 크래시를 찾는 일반 하네스입니다.
 
-고정된 서버 내부 배열에서 실제 메시지 길이만 벗어나는 stale read는 ASan이 탐지하지 못할 수 있습니다. 해당 검사는 공개 전 검토가 필요한 별도 boundary 퍼저로 분리합니다.
+고정된 서버 내부 배열에서 실제 메시지 길이만 벗어나는 stale read는 ASan이 탐지하지 못할 수 있습니다. 해당 검사는 메시지 경계 oracle을 적용한 별도 Boundary 퍼저로 분리합니다.
