@@ -1,0 +1,9 @@
+a.out
+fuzz/artifacts/
+fuzz/build/
+fuzz/corpus/
+fuzz/logs/
+fuzz-nrc/artifacts/
+fuzz-nrc/build/
+fuzz-nrc/corpus/
+fuzz-nrc/logs/
